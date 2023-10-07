@@ -2,6 +2,8 @@ from django.shortcuts import render
 from .forms import RegisterForm
 from django.contrib.auth.models import User
 from .utils import check_email
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 # Create your views here.
 
 
@@ -22,11 +24,16 @@ def register(request):
                 error = 'This username is taken. Try again!'
             if email_taken:
                 error = 'This email is taken. Try again!'
-            
+
             if not username_taken and not email_taken:
                 email_valid = check_email(email)
                 if email_valid:
-                    pass
+                    try:
+                        validate_password(password1)
+                    except ValidationError as e:
+                        return render(request, 'register.html', {'password_errors': e.messages, 'form': RegisterForm()})
+                    else:
+                        pass
                 else:
                     error = 'Invalid email. Try again!'
 
