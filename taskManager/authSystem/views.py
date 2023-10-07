@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import RegisterForm
 from django.contrib.auth.models import User
 from .utils import check_email
@@ -33,7 +33,9 @@ def register(request):
                     except ValidationError as e:
                         return render(request, 'register.html', {'password_errors': e.messages, 'form': RegisterForm()})
                     else:
-                        pass
+                        user = User.objects.create_user(
+                            username=username, email=email, password=password1)
+                        return redirect('home')
                 else:
                     error = 'Invalid email. Try again!'
 
