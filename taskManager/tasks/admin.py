@@ -3,7 +3,6 @@ from .models import Task
 
 # Register your models here.
 
-
 class CreateDate(admin.ModelAdmin):
     readonly_fields = ('create_date',)
 

@@ -1,3 +1,7 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
 <h1>Register</h1>
 
 
@@ -21,3 +25,4 @@
     {% csrf_token %}
     <button type="submit">Register</button>
 </form>
+{% endblock content %}
