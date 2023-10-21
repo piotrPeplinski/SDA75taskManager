@@ -10,6 +10,7 @@
     <p>Welcome back {{user}}</p>
     <a href="{% url 'logout_user' %}">Log out</a>
     <a href="{% url 'tasks' %}">Tasks</a>
+    <a href="{% url 'create' %}">Create</a>
     {% else %}
     <a href="{% url 'register' %}">Sign up</a>
     <a href="{% url 'login_user' %}">Log in</a>
