@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from .utils import check_email
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login
 # Create your views here.
 
 
@@ -43,3 +45,22 @@ def register(request):
             error = 'Passwords did not match. Try again!'
 
         return render(request, 'register.html', {'form': RegisterForm(), 'error': error})
+
+
+def login_user(request):
+    if request.method == 'GET':
+        return render(request, 'login_user.html', {'form': AuthenticationForm()})
+    else:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            user_exists = User.objects.filter(username=username).exists()
+            if user_exists:
+                error = 'Incorrect password.'
+            else:
+                error = f'User with username: {username} does not exist.'
+            return render(request, 'login_user.html', {'form': AuthenticationForm(), 'error':error}) 
